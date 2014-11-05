@@ -1,242 +1,68 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>three.js canvas - geometry - cube</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				font-family: Monospace;
-				background-color: #f0f0f0;
-				margin: 0px;
-				overflow: hidden;
-				background: transparent url(http://www.hdwallpapers.in/walls/boat_sea_beach-normal.jpg) center center no-repeat;
-				background-size:cover;
-			}
-			
-			#console {
-				position: absolute;
-				right: 10px;
-				top: 10px;
-				min-width: 20em;
-				min-height: 3em;
-				background-color: #000;
-				color: #ddd;
-			}
-		</style>
-	</head>
-	<body>
+<head>
+    <title>three.js canvas - geometry - cube</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <canvas id="backgroundImage"></canvas>
 
-		<script src="js/three.min.js"></script>
+    <div id="console">
+        <div>ROT X: <span id="targetRotationX"></span></div>
+        <div>ROT Y: <span id="targetRotationY"></span></div>
+    </div>
 
-		<script src="js/stats.min.js"></script>
-		<div id="console">
-			<div>ROT X: <span id="targetRotationX"></span></div>
-			<div>ROT Y: <span id="targetRotationY"></span></div>
-		</div>
-		<div id="container"></div>
-		<script>
-			var containerWidth = window.innerWidth, containerHeight = window.innerHeight;
+    <div id="container"></div>
 
-		    var container, stats;
+    <div id="html_info">
+        <div id="info_0">
+            <h3>face 1</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus explicabo eum delectus? Enim dolorum error sunt, consequuntur, expedita corrupti porro officia est amet autem. Vitae, natus cum. Ea perspiciatis, rerum?</p>
+        </div>
 
-		    var camera, scene, renderer;
+        <div id="info_1">
+            <h3>face 2</h3>
+            <p>Iure cupiditate dolor vel obcaecati fuga, iusto provident, est laboriosam voluptatibus modi praesentium labore excepturi repellendus nisi laborum accusantium possimus doloremque. Aliquam cumque nisi in tempore placeat quos asperiores, minima ipsum reprehenderit excepturi molestiae, inventore dolore doloremque possimus velit necessitatibus esse.</p>
+        </div>
 
-		    var cube;
+        <div id="info_2">
+            <h3>face 3</h3>
+            <p>
+                <img src="http://img3.wikia.nocookie.net/__cb20080916194513/muppet/images/3/36/PlacidoFlamingo.jpg">
+            </p>
+        </div>
 
-		    var targetRotationY = 0, targetRotationX = 0;
-		    var targetRotationYOnMouseDown = 0, targetRotationXOnMouseDown = 0;
-		    var dragged = false;
+        <div id="info_3">
+            <h3>face 4</h3>
+            <p>
+                <form onsubmit="return showMessage()">
+                    <input type="text" placeholder="Scrivi qualcosa" />
+                    <button type="submit" >Invia</button>
+                </form>
+            </p>
+        </div>
 
-		    var mouseX = 0;
-		    var mouseXOnMouseDown = 0;
+        <div id="info_4">
+            <h3>face 5</h3>
+            <p>
+                Grandissimo Smaila
+            </p>
+        </div>
 
-		    var windowHalfX = window.innerWidth / 2;
-		    var windowHalfY = window.innerHeight / 2;
-			var geometry
-			
-		    init([3,3,3]);
-		    animate();
+        <div id="info_5">
+            <h3>face 6</h3>
+            <p>
+                <iframe width="420" height="315" src="//www.youtube.com/embed/Pdky6EeDyPk" frameborder="0" allowfullscreen></iframe>
+            </p>
+        </div>
+    </div>
 
-		    function init(texelization) {
 
-		        container = document.getElementById('container');
-			container.style.width = containerWidth + 'px';
-			container.style.height = containerHeight + 'px';
-			container.style.position = 'relative';
-		        document.body.appendChild(container);
-
-		        var info = document.createElement('div');
-		        info.style.position = 'absolute';
-		        info.style.top = '10px';
-		        info.style.width = '100%';
-		        info.style.textAlign = 'center';
-		        info.innerHTML = 'Drag to spin the pack';
-		        container.appendChild(info);
-			
-		        camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
-		        camera.position.y = 150;
-		        camera.position.z = 400;
-
-		        scene = new THREE.Scene();
-
-		        // Cube
-			var cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, vertexColors: THREE.VertexColors } );
-			var color, face, numberOfSides, vertexIndex;
-	
-			// faces are indexed using characters
-			var faceIndices = [ 'a', 'b', 'c', 'd' ];
-			
-		        geometry = new THREE.CubeGeometry(200, 200, 200, texelization[0], texelization[1], texelization[2]);
-			
-			for ( var i = 0; i < geometry.faces.length; i++ ) 
-			{
-				face  = geometry.faces[ i ];	
-				face.color.setRGB( Math.random(), Math.random(), Math.random() );	
-			}
-
-		        // material
-		        var material = new THREE.MeshBasicMaterial({ color: 0xffffff, vertexColors: THREE.FaceColors } );
-
-		        cube = new THREE.Mesh(geometry, material);
-		        cube.position.y = 150;
-		        scene.add(cube);
-
-		        renderer = new THREE.WebGLRenderer();
-		        renderer.setSize(containerWidth, containerHeight);
-
-		        container.appendChild(renderer.domElement);
-
-		        document.addEventListener('mousedown', onDocumentMouseDown, false);
-		        document.addEventListener('touchstart', onDocumentTouchStart, false);
-		        document.addEventListener('touchmove', onDocumentTouchMove, false);
-
-		        window.addEventListener('resize', onWindowResize, false);
-
-		    }
-
-		    function onWindowResize() {
-
-		        windowHalfX = window.innerWidth / 2;
-		        windowHalfY = window.innerHeight / 2;
-
-		        camera.aspect = window.innerWidth / window.innerHeight;
-		        camera.updateProjectionMatrix();
-
-		        renderer.setSize(window.innerWidth, window.innerHeight);
-
-		    }
-
-		    //
-
-		    function onDocumentMouseDown(event) {
-
-		        event.preventDefault();
-
-		        document.addEventListener('mousemove', onDocumentMouseMove, false);
-		        document.addEventListener('mouseup', onDocumentMouseUp, false);
-		        document.addEventListener('mouseout', onDocumentMouseOut, false);
-
-		        mouseXOnMouseDown = event.clientX - windowHalfX;
-		        targetRotationYOnMouseDown = targetRotationY;
-		        mouseYOnMouseDown = event.clientY - windowHalfY;
-		        targetRotationXOnMouseDown = targetRotationX;
-			dragged = true;
-		    }
-
-		    function onDocumentMouseMove(event) {
-			dragged = true;
-		        mouseX = event.clientX - windowHalfX;
-		        mouseY = event.clientY - windowHalfY;
-		        targetRotationY = targetRotationYOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
-		        targetRotationX = targetRotationXOnMouseDown + (mouseY - mouseYOnMouseDown) * 0.02;
-		    }
-
-		    function onDocumentMouseUp(event) {
-
-		        document.removeEventListener('mousemove', onDocumentMouseMove, false);
-		        document.removeEventListener('mouseup', onDocumentMouseUp, false);
-		        document.removeEventListener('mouseout', onDocumentMouseOut, false);
-			dragged = false;
-		    }
-
-		    function onDocumentMouseOut(event) {
-
-		        document.removeEventListener('mousemove', onDocumentMouseMove, false);
-		        document.removeEventListener('mouseup', onDocumentMouseUp, false);
-		        document.removeEventListener('mouseout', onDocumentMouseOut, false);
-		    }
-
-		    function onDocumentTouchStart(event) {
-
-		        if (event.touches.length === 1) {
-
-		            event.preventDefault();
-
-		            mouseXOnMouseDown = event.touches[0].pageX - windowHalfX;
-		            targetRotationYOnMouseDown = targetRotationY;
-		            mouseYOnMouseDown = event.touches[0].pageY - windowHalfY;
-		            targetRotationXOnMouseDown = targetRotationX;
-		        }
-
-		    }
-
-		    function onDocumentTouchMove(event) {
-
-		        if (event.touches.length === 1) {
-
-		            event.preventDefault();
-
-		            mouseX = event.touches[0].pageX - windowHalfX;
-		            targetRotationY = targetRotationYOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.05;
-		            mouseY = event.touches[0].pageY - windowHalfY;
-		            targetRotationX = targetRotationXOnMouseDown + (mouseY - mouseYOnMouseDown) * 0.05;
-		        }
-
-		    }
-
-		    function animate() {
-		        requestAnimationFrame(animate);
-		        render();
-		    }
-
-		    function render() {
-			if( dragged) {
-				cube.rotation.y += (targetRotationY - cube.rotation.y) * 0.05;
-				cube.rotation.x += (targetRotationX - cube.rotation.x) * 0.05;
-			} else {
-				if (Math.abs((targetRotationY - cube.rotation.y) * 0.05) > 0.015){
-					cube.rotation.y += (targetRotationY - cube.rotation.y) * 0.05;
-				} else {
-					cube.rotation.y += 0.005;
-					targetRotationY = cube.rotation.y;
-				
-				}
-				if (cube.rotation.x > 0.35) {
-					cube.rotation.x -= 0.015;
-				} else if (cube.rotation.x < 0.25) {
-					cube.rotation.x += 0.015;
-				} else {
-					cube.rotation.x = 0.3;
-				}
-				
-			}
-			var radiansConv = 180 / Math.PI;
-			var rotationXDegrees = Math.abs((cube.rotation.x * radiansConv) % 360);
-			var rotationYDegrees = Math.abs((cube.rotation.y * radiansConv) % 360);
-			document.getElementById('targetRotationX').innerHTML = rotationXDegrees;
-			document.getElementById('targetRotationY').innerHTML = rotationYDegrees;
-			
-			if (rotationYDegrees > 0 && rotationYDegrees < 45 || rotationYDegrees > 315 && rotationYDegrees < 360) {
-				document.body.style.backgroundImage = "url(http://www.hdwallpapers.in/walls/boat_sea_beach-normal.jpg)";
-			} else {
-				document.body.style.backgroundImage = "url(http://crownrights.org/wp-content/uploads/2012/08/mars.jpg)";
-			}
-			
-		        renderer.render(scene, camera);
-		    }
-
-		</script>
-
-	</body>
+    <script src="js/three.min.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script type="text/javascript" src="js/helper.js"></script>
+    <script src="js/engine.js" ></script>
+</body>
 </html>
