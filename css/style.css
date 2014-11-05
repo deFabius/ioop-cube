@@ -1,0 +1,49 @@
+body {
+        font-family: Helvetica;
+        background-color: #333F47;
+        margin: 0px;
+        overflow: hidden;
+        font-size: 18px;
+        line-height: 1.4em;
+    }
+
+#console {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    min-width: 20em;
+    min-height: 3em;
+    background-color: #000;
+    color: #ddd;
+}
+
+#backgroundImage {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#html_info {
+	width: 20%;
+	position: absolute;
+	top: 20%;
+	right: 50px;
+}
+
+#html_info > div {
+	padding: 0 1em;
+	background-color: rgba(255,255,255,0.8);
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	display: none;
+}
+
+#html_info > div img {
+	max-width: 100%;
+}
+
+input {
+	display: block;
+	font-size: 1.2em;
+	padding: 0.3em;
+}
